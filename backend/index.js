@@ -10,6 +10,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import { createServer } from "node:http";
 import eventRouter from "./routes/event.js";
+import { configDotenv } from "dotenv";
 
 const app = express();
 const server = createServer(app);
@@ -19,8 +20,8 @@ const io = new Server(server, {
 	},
 });
 const PORT = 8080;
-
-connectMongo("mongodb+srv://khushalmidha:7H5qXGxJ03vfYt9A@cluster0.qyi5j.mongodb.net/");
+configDotenv()
+connectMongo(process.env.DATABASE_URL);
 
 app.use(
 	cors({
