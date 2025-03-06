@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CommunityCard from "../components/CommunityCard";
 import EventCard from "../components/EventCard";
 import MessageCard from "../components/MessageCard";
 import RecommendationCard from "../components/RecommendationCard";
-import Chat from "./Chat";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RecommendationDoctors from "../components/RecommendationDoctors";
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
+	const { isAuth } = useAuth();
+	const navigate = useNavigate();
+	console.log("Dashboard", isAuth);
+	useEffect(()=>{
+		if(!isAuth){
+			navigate("/login");
+		}
+	},[])
 	return (
 		<div className="p-6 bg-gray-100 min-h-screen">
 			<h2 className="text-2xl font-semibold">

@@ -2,10 +2,11 @@ import User from "../model/user.js";
 import jwt from "jsonwebtoken";
 import { configDotenv } from "dotenv";
 
-configDotenv;
+configDotenv();
 
 const getUserById = async (req, res) => {
 	const token = req.cookies.token;
+	console.log(token);
 	if (!token) {
 		return res.status(401).json({ message: "Unauthorized" });
 	}
@@ -18,7 +19,7 @@ const getUserById = async (req, res) => {
 		if (!user) {
 			return res.status(401).json({ message: "Unauthorized" });
 		}
-		return res.json(user);
+		return res.status(200).json(user);
 	});
 };
 

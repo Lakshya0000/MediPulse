@@ -11,20 +11,18 @@ import Chat from "./pages/Chat";
 import DoctorsProfile from "./pages/DoctorsProfile";
 import PastEvents from "./pages/PastEvents";
 import CommunityForm from "./pages/CommunityForm";
-import { useState } from "react";
 
 
 function App() {
-
-  const  [auth,setauth] = useState(false)
+  console.log("App");
   return (
     <>
-      <Navbar auth={auth} setauth={setauth}/>
+      <Navbar/>
 
       <Routes>
       <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp setauth={setauth} />} />
-        <Route path="/login" element={<Login setauth={setauth} />} />
+        <Route path="/signup" element={<SignUp/>} />
+        <Route path="/login" element={<Login/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/events" element={<Events />} />
         <Route path="/chat" element={<Chat />} />
