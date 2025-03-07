@@ -1,18 +1,6 @@
-// import React from 'react'
-
-// const EventCard = () => {
-//   return (
-//     <div>
-      
-//     </div>
-//   )
-// }
-
-// export default EventCard
-
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useNavigate } from "react-router-dom";
 import { Shield } from "lucide-react";
 
 const EventCard = () => {
