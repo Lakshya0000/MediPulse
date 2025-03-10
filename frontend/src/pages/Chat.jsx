@@ -356,6 +356,7 @@ function Chat() {
 				method: "GET",
 			});
 			const obj = await res.json();
+			console.log("Communities : ", obj);
 			for (let i = 0; i < obj.length; i++) {
 				obj[i].image =
 					"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=150&h=150&fit=crop";
@@ -505,13 +506,14 @@ function Chat() {
 							onChange={(e) => setVoiceMessage(e.target.value)}
 							className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 						/>
-						<Voice setNewMessage={setVoiceMessage} />
+						
 						<button
 							type="submit"
 							className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
 						>
 							<Send className="w-5 h-5" />
 						</button>
+						<Voice setNewMessage={setVoiceMessage} />
 					</div>
 				</form>
 			</div>

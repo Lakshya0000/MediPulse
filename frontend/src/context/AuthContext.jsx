@@ -6,31 +6,29 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuth,setIsAuth] = useState(false);
+  const [role,setRole] = useState("user");
   useEffect(()=>{
     const check = async() => {
         try{
-            const res = await axios.get("http://localhost:8080/user/",{withCredentials:true});
+            const res = await axios.get(`http://localhost:8080/verify/`,{withCredentials:true,credentials:'include'})
             if(res.status === 200){
                 console.log({"hi":res.data});
-                setUser(res.data);
+                setUser(res.data.data);
+                setRole(res.data.role);
                 setIsAuth(true);
                 return;
-            }
-            else{
-                console.log(res.data);
-                setIsAuth(false);
             }
         }
         catch(err){
             console.log(err);
+            setUser(null);  
             setIsAuth(false);
         }
     }
     check();
-  },[isAuth])
-
+  },[])
   return (
-    <AuthContext.Provider value={{ isAuth, user, setUser, setIsAuth, }}>
+    <AuthContext.Provider value={{ isAuth, user, setUser, setIsAuth, role, setRole }}>
       {children}
     </AuthContext.Provider>
   );

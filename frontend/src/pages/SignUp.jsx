@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { UserCircle2, Stethoscope, Mail } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
@@ -14,7 +14,7 @@ const ProfileSelection = ({ setUserType }) => (
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <button
-        onClick={() => setUserType("patient")}
+        onClick={() => setUserType("user")}
         className="p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
       >
         <UserCircle2 className="h-8 w-8 text-blue-600 mx-auto" />
@@ -37,7 +37,7 @@ const ProfileSelection = ({ setUserType }) => (
   </div>
 );
 
-const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
+const PatientSignUp = ({ handleSubmit, message, patient, setPatient, isloading }) => (
   <form className="space-y-6" onSubmit={handleSubmit}>
     {message && (
       <div className="text-red-500 text-center">
@@ -62,8 +62,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
             type="email"
             required
             disabled={isloading}
-            value={user.email}
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            value={patient.email || ""}
+            onChange={(e) => setPatient({ ...patient, email: e.target.value })}
             className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
             placeholder="Enter Email address"
           />
@@ -76,8 +76,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           type="password"
           required
           disabled={isloading}
-          value={user.password}
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          value={patient.password || ""}
+          onChange={(e) => setPatient({ ...patient, password: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Create Password"
         />
@@ -89,8 +89,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           type="firstname"
           required
           disabled={isloading}
-          value={user.firstName}
-          onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+          value={patient.firstName || ""}
+          onChange={(e) => setPatient({ ...patient, firstName: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter your First name"
         />
@@ -101,8 +101,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           name="lastname"
           type="lastname"
           disabled={isloading}
-          value={user.lastName}
-          onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+          value={patient.lastName || ""}
+          onChange={(e) => setPatient({ ...patient, lastName: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter your Last name"
         />
@@ -113,8 +113,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           name="gender"
           required
           disabled={isloading}
-          value={user.gender}
-          onChange={(e) => setUser({ ...user, gender: e.target.value })}
+          value={patient.gender || ""}
+          onChange={(e) => setPatient({ ...patient, gender: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         >
           <option value="" disabled>
@@ -131,8 +131,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           name="phone-number"
           type="tel"
           disabled={isloading}
-          value={user.phone}
-          onChange={(e) => setUser({ ...user, phone: e.target.value })}
+          value={patient.phone || ""}
+          onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter your Phone number"
         />
@@ -143,8 +143,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           name="bio"
           type="text"
           disabled={isloading}
-          value={user.bio}
-          onChange={(e) => setUser({ ...user, bio: e.target.value })}
+          value={patient.bio || ""}
+          onChange={(e) => setPatient({ ...patient, bio: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter Bio"
         />
@@ -159,8 +159,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           name="primary-condition"
           type="primary-condition"
           disabled={isloading}
-          value={user.primaryCondition}
-          onChange={(e) => setUser({ ...user, primaryCondition: e.target.value })}
+          value={patient.primaryCondition || ""}
+          onChange={(e) => setPatient({ ...patient, primaryCondition: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter your Primary condition"
         />
@@ -175,9 +175,9 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           id="emergency-name"
           name="emergency-name"
           disabled={isloading}
-          value={user.emergencyContact}
+          value={patient.emergencyContact || ""}
           type="emergency-name"
-          onChange={(e) => setUser({ ...user, emergencyContact: e.target.value })}
+          onChange={(e) => setPatient({ ...patient, emergencyContact: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter name"
         />
@@ -189,8 +189,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           name="relation"
           type="relation"
           disabled={isloading}
-          value={user.emergencyRelation}
-          onChange={(e) => setUser({ ...user, emergencyRelation: e.target.value })}
+          value={patient.emergencyRelation || ""}
+          onChange={(e) => setPatient({ ...patient, emergencyRelation: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter your relation with the person"
         />
@@ -203,8 +203,8 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
           type="number"
           disabled={isloading}
           pattern="[0-9]{10}"
-          value={user.emergencyPhone}
-          onChange={(e) => setUser({ ...user, emergencyPhone: e.target.value })}
+          value={patient.emergencyPhone || ""}
+          onChange={(e) => setPatient({ ...patient, emergencyPhone: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter the phone number"
         />
@@ -223,8 +223,13 @@ const PatientSignUp = ({ handleSubmit, message, user, setUser, isloading }) => (
   </form>
 );
 
-const DoctorSignUp = () => (
-  <form className="space-y-6">
+const DoctorSignUp = ({handleSubmit,message,doctor,setDoctor,isloading}) => (
+  <form className="space-y-6" onSubmit={handleSubmit}>
+    {message && (
+      <div className="text-red-500 text-center">
+        {message}
+      </div>
+    )}
     <div className="userprofile rounded-md shadow-sm -space-y-px">
       <div className="text-xl font-bold m-2 underline mr-59">
         General Infomation
@@ -239,6 +244,9 @@ const DoctorSignUp = () => (
             id="email"
             name="email"
             type="email"
+            value={doctor.email || ""}
+            disabled={isloading}
+            onChange={(e) => setDoctor({ ...doctor, email: e.target.value })}
             required
             className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
             placeholder="Enter Email address"
@@ -250,6 +258,9 @@ const DoctorSignUp = () => (
           id="password"
           name="password"
           type="password"
+          value={doctor.password || ""}
+          disabled={isloading}
+          onChange={(e) => setDoctor({ ...doctor, password: e.target.value })}
           required
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
           placeholder="Enter Password"
@@ -262,6 +273,9 @@ const DoctorSignUp = () => (
           name="firstName"
           type="text"
           placeholder="First Name"
+          value={doctor.firstName || ""}
+          disabled={isloading}
+          onChange={(e) => setDoctor({ ...doctor, firstName: e.target.value })}
           required
           className="input appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
@@ -270,23 +284,38 @@ const DoctorSignUp = () => (
         <input
           name="lastName"
           type="text"
+          disabled={isloading}
+          value={doctor.lastName || ""}
+          onChange={(e) => setDoctor({ ...doctor, lastName: e.target.value })}
           placeholder="Last Name"
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
       </div>
-      <div>
-        <input
+      <div className="gender">
+        <select
+          id="gender"
           name="gender"
-          type="text"
-          placeholder="Gender"
           required
+          disabled={isloading}
+          value={doctor.gender || ""}
+          onChange={(e) => setDoctor({ ...doctor, gender: e.target.value })}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-        />
+        >
+          <option value="" disabled>
+            Select your Gender
+          </option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
       </div>
       <div>
         <input
           name="phoneNumber"
           type="tel"
+          value={doctor.phone || ""}
+          onChange={(e) => setDoctor({ ...doctor, phone: e.target.value })}
+          disabled={isloading}
           placeholder="Phone Number"
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
@@ -296,6 +325,9 @@ const DoctorSignUp = () => (
           name="bio"
           type="text"
           placeholder="Bio"
+          value={doctor.bio || ""}
+          onChange={(e) => setDoctor({ ...doctor, bio: e.target.value })}
+          disabled={isloading}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
       </div>
@@ -305,6 +337,9 @@ const DoctorSignUp = () => (
           name="experience.years"
           type="number"
           placeholder="Years of Experience"
+          value={doctor.years || ""}
+          onChange={(e) => setDoctor({ ...doctor, years: e.target.value })}
+          disabled={isloading}
           required
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
@@ -314,6 +349,9 @@ const DoctorSignUp = () => (
           name="experience.expertise"
           type="text"
           placeholder="Expertise"
+          value={doctor.expertise || ""}
+          onChange={(e) => setDoctor({ ...doctor, expertise: e.target.value })}
+          disabled={isloading}
           required
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
@@ -324,6 +362,9 @@ const DoctorSignUp = () => (
           name="clinic.name"
           type="text"
           placeholder="Clinic Name"
+          value={doctor.clinicName || ""}
+          onChange={(e) => setDoctor({ ...doctor, clinicName: e.target.value })}
+          disabled={isloading}
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
       </div>
@@ -331,6 +372,9 @@ const DoctorSignUp = () => (
         <input
           name="clinic.location"
           type="text"
+          value={doctor.clinicLocation || ""}
+          onChange={(e) => setDoctor({ ...doctor, clinicLocation: e.target.value })}
+          disabled={isloading}
           placeholder="Clinic Location"
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
@@ -339,6 +383,9 @@ const DoctorSignUp = () => (
         <input
           name="clinic.phoneNumber"
           type="tel"
+          value={doctor.clinicPhone || ""}
+          onChange={(e) => setDoctor({ ...doctor, clinicPhone: e.target.value })}
+          disabled={isloading}
           placeholder="Clinic Phone Number"
           className="appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
         />
@@ -347,6 +394,7 @@ const DoctorSignUp = () => (
       <div>
         <button
           type="submit"
+          disabled={isloading}
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Create Doctor Account
@@ -357,25 +405,14 @@ const DoctorSignUp = () => (
 );
 
 const SignUp = () => {
-  const [userType, setUserType] = useState("select");
+  const {type} = useParams();
+  const [userType, setUserType] = useState(type || "select");
   const redirect = useNavigate();
-  const [user, setUser] = useState({ 
-    name: "", 
-    email: "", 
-    password: "", 
-    firstName: "", 
-    lastName: "", 
-    gender: "", 
-    phone: "", 
-    bio: "", 
-    primaryCondition: "", 
-    emergencyContact: "", 
-    emergencyRelation: "", 
-    emergencyPhone: "" 
-  });
+  const [patient, setPatient] = useState({});
+  const [doctor, setDoctor] = useState({});
   const [isloading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const { isAuth, setIsAuth } = useAuth();
+  const { isAuth, setIsAuth, setUser, setRole } = useAuth();
   
   if (isAuth) {
     redirect("/dashboard");
@@ -386,13 +423,17 @@ const SignUp = () => {
     setMessage("");
     setIsLoading(true);
     try {
+      const data = userType === "user" ? patient : doctor;
       const res = await axios.post(
-        "http://localhost:8080/user/signup", 
-        user, 
+        `http://localhost:8080/${userType}/signup`, 
+        data, 
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
       if (res.status === 201) {
+        console.log("check : ", res.data);
         setIsAuth(true);
+        setUser(res.data.result);
+        setRole(userType);
         redirect("/dashboard");
       } else {
         setMessage(res.data.message);
@@ -402,7 +443,7 @@ const SignUp = () => {
       setMessage("An error occured");
     }
     setIsLoading(false);
-  }, [user, redirect, setIsAuth]);
+  }, [userType, patient, doctor, setIsAuth, setUser, setRole]);
 
   return (
     <div className="flex-1 flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -423,16 +464,16 @@ const SignUp = () => {
         </div>
 
         {userType === "select" && <ProfileSelection setUserType={setUserType} />}
-        {userType === "patient" && (
+        {userType === "user" && (
           <PatientSignUp 
             handleSubmit={handleSubmit}
             message={message}
-            user={user}
-            setUser={setUser}
+            patient={patient}
+            setPatient={setPatient}
             isloading={isloading}
           />
         )}
-        {userType === "doctor" && <DoctorSignUp />}
+        {userType === "doctor" && <DoctorSignUp handleSubmit={handleSubmit} message={message} doctor={doctor} setDoctor={setDoctor} isloading={isloading} />}
 
         {userType !== "select" && (
           <button

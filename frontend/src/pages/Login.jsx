@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, UserCircle2, Stethoscope } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -126,14 +126,16 @@ const Login = () => {
   const [userType, setUserType] = useState("select");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isAuth, setIsAuth } = useAuth();
+  const { isAuth, setIsAuth, setUser, setRole } = useAuth();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  if (isAuth) {
-    navigate("/dashboard");
-  }
+  useEffect(() => {
+    if(isAuth){
+      navigate("/dashboard");
+    }
+  },[isAuth])
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -147,16 +149,20 @@ const Login = () => {
       );
       if (res.status === 201) {
         setIsAuth(true);
+        setUser(res.data.result);
+        setRole(userType);
         navigate("/dashboard");
       } else {
         setMessage(res.data.message);
+        console.log(res.data.message);
+        console.log(res);
       }
     } catch (err) {
       console.log(err);
       setMessage("An error occurred");
     }
     setLoading(false);
-  }, [email, password, userType, navigate, setIsAuth]);
+  }, [email, password, userType, navigate, setIsAuth, setMessage]);
 
   return (
     <div className="flex-1 flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

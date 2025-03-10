@@ -7,53 +7,72 @@ const doctorsData = [
 		id: "1",
 		name: "Dr. Sarah Johnson",
 		specialty: "Neurologist",
-		experience: "10 years",
+		experience:{
+			years: "10 years",
+			expertise: "Neurology"
+		},
 		qualification: "MD",
 		memberSince: "2017",
 		hospital: "Healing House",
 		address: "Plot no. 77, xx lane, sector - xx, city_name, state",
 		pin: "564-698",
 		timings: "9:00 am - 4:00 pm",
-		contact: "xxxxx-xxxxx",
+		phone: "xxxxx-xxxxx",
 		email: "eeee@mail.com",
+		clinic: {
+			name: "Healing House",
+			location: "Plot no. 77, xx lane, sector - xx, city_name, state",
+			pin: "564-698",
+			phone: "xxxxx-xxxxx",
+		}
 	},
 	{
 		id: "2",
 		name: "Dr. John Doe",
 		specialty: "Cardiologist",
-		experience: "15 years",
+		experience: {
+			years: "15 years",
+			expertise: "Cardiology"
+		},
 		qualification: "MBBS, MD",
 		memberSince: "2015",
 		hospital: "Heart Care Center",
 		address: "Plot no. 22, ABC Road, City Name, State",
 		pin: "123-456",
 		timings: "10:00 am - 5:00 pm",
-		contact: "yyyyy-yyyyy",
+		phone: "yyyyy-yyyyy",
 		email: "john.doe@mail.com",
+		clinic: {
+			name: "Heart Care Center",
+			location: "Plot no. 22, ABC Road, City Name, State",
+			pin: "123-456",
+			phone: "yyyyy-yyyyy",
+		}
 	},
 ];
 
 function DoctorsProfile() {
 	const { id } = useParams(); // Get doctor ID from URL
-	const [doctor, setDoctor] = useState(null);
+	const [doctor, setDoctor] = useState({});
 
 	useEffect(() => {
 		async function getDoctor() {
-			const res = await fetch("http://localhost:8080/doctor/", {
-				method: "GET",
-				credentials: "include",
-			});
-			const obj = await res.json();
-			for (let i=0;i<obj.length;i++) {
-				if (obj[i]._id === id) {
-					setDoctor(obj[i]);
-					break;
-				}
-			}
+			// const res = await fetch("http://localhost:8080/doctor/", {
+			// 	method: "GET",
+			// 	credentials: "include",
+			// });
+			// const obj = await res.json();
+			// for (let i=0;i<obj.length;i++) {
+			// 	if (obj[i]._id === id) {
+			// 		setDoctor(obj[i]);
+			// 		break;
+			// 	}
+			// }
 		}
-		getDoctor();
+		// getDoctor();
 		// const selectedDoctor = doctorsData.find(doc => doc.id === id);
 		// setDoctor(selectedDoctor);
+		setDoctor(doctorsData[id - 1]);
 	}, []);
 
 	if (!doctor) {
@@ -69,10 +88,10 @@ function DoctorsProfile() {
 			<div className="mt-10 ml-9 text-xl font-bold p-4">
 				<CircleUserRound className="w-20 h-20 text-black-400 bg-blue-100 border rounded-full border-blue-100" />
 				<div className="flex items-center">
-					<h1>{`${doctor.firstName} ${doctor.lastName}`}</h1>
+					<h1>{`${doctor?.name}`}</h1>
 				</div>
 				<div className="text-gray-400 text-sm">
-					{doctor.experience.expertise}
+					{doctor?.experience?.expertise}
 				</div>
 			</div>
 
@@ -85,10 +104,10 @@ function DoctorsProfile() {
 						</div>
 						<div className="flex justify-between px-5 mt-3 font-bold text-blue-500">
 							<div className="p-1 bg-blue-100 rounded-xl">
-								{doctor.experience.years}
+								{doctor?.experience?.years}
 							</div>
 							<div className="p-1 bg-blue-100 rounded-xl">
-								{doctor.experience.expertise}
+								{doctor?.experience?.expertise}
 							</div>
 						</div>
 						<div className="flex justify-between px-5 mt-4 font-bold">
@@ -97,10 +116,10 @@ function DoctorsProfile() {
 						</div>
 						<div className="flex justify-between px-5 mt-3 font-bold text-blue-500">
 							<div className="p-1 bg-blue-100 rounded-xl">
-								{doctor.qualification}
+								{doctor?.qualification}
 							</div>
 							<div className="p-1 bg-blue-100 rounded-xl">
-								{doctor.memberSince}
+								{doctor?.memberSince}
 							</div>
 						</div>
 					</div>
@@ -108,22 +127,22 @@ function DoctorsProfile() {
 
 				<div className="mt-8 bg-blue-50 rounded-xl w-full p-10">
 					<MapPinHouse color="#427CED" />
-					<p className="text-2xl font-bold">{doctor.clinic.name}</p>
+					<p className="text-2xl font-bold">{doctor?.clinic?.name}</p>
 					<div className="flex">
 						<div className="pl-4 font-bold text-gray-400 text-sm">
-							{doctor.clinic.location} <br /> Pin - {doctor.clinic.pin}
+							{doctor?.clinic?.location} <br /> Pin - {doctor?.clinic?.pin}
 						</div>
 						<div className="pl-4 m-auto font-bold text-right text-gray-400 text-sm">
-							Timings: {doctor.timings} <br />
-							Contact: {doctor.phone} <br />
-							Mail: {doctor.email}
+							Timings: {doctor?.timings} <br />
+							Contact: {doctor?.phone} <br />
+							Mail: {doctor?.email}
 						</div>
 					</div>
-					<div className="mt-3 text-blue-600 underline text-sm">
+					{/* <div className="mt-3 text-blue-600 underline text-sm">
 						<a href="#" className="hover:text-blue-800">
 							Directions
 						</a>
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>

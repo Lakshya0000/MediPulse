@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const doctorSchema = new mongoose.Schema(
 	{
@@ -8,6 +9,10 @@ const doctorSchema = new mongoose.Schema(
 		},
 		lastName: {
 			type: String,
+		},
+		password: {
+			type: String,
+			required: true,
 		},
 		email: {
 			type: String,
@@ -71,6 +76,10 @@ const doctorSchema = new mongoose.Schema(
 		timestamps: true,
 	},
 );
+
+doctorSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 12);
+});
 
 const Doctor = mongoose.model("doctor", doctorSchema);
 

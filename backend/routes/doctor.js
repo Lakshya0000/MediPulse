@@ -12,4 +12,5 @@ doctorRouter.get("/:id", userValidation, getDoctorById);
 doctorRouter.delete("/:id", userValidation, deleteDoctorById);
 doctorRouter.get("/", userValidation, getAllDoctors);
 
+
 export default doctorRouter;

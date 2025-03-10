@@ -11,6 +11,7 @@ import cors from "cors";
 import { createServer } from "node:http";
 import eventRouter from "./routes/event.js";
 import { configDotenv } from "dotenv";
+import { Verifier } from "./controller/auth.js";
 
 const app = express();
 const server = createServer(app);
@@ -38,7 +39,7 @@ app.use("/community", communityRouter);
 app.use("/message", messageRouter);
 app.use("/ngo", ngoRouter);
 app.use("/event", eventRouter);
-
+app.get("/verify", Verifier);
 io.of("/chatroom").on("connection", (socket) => {
 	console.log("socket connected");
 	const room_id = socket.handshake.auth.room;

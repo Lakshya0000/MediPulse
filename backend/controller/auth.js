@@ -2,7 +2,9 @@ import User from "../model/user.js";
 import Doctor from "../model/doctor.js";
 import { createSecret } from "../util/createSecret.js";
 import bcrypt from "bcryptjs";
-
+import { configDotenv } from "dotenv";
+import jwt from "jsonwebtoken";
+configDotenv()
 const userSignup = async (req, res, next) => {
 	const {
 		firstName,
@@ -17,9 +19,14 @@ const userSignup = async (req, res, next) => {
 		emergencyRelation,
 		emergencyPhone,
 	} = req.body;
+	console.log(req.body);
 	if (!firstName || !email || !password || !gender) {
 		return res.json({
 			message: "FirstName, Email, Password and Gender are required",
+			firstName,
+			email,
+			password,
+			gender
 		});
 	}
 
@@ -73,11 +80,11 @@ const userLogin = async (req, res) => {
 
 	const user = await User.findOne({ email });
 	if (!user) {
-		return res.json({ messgae: "User does not exist" });
+		return res.json({ message: "User does not exist" });
 	}
 	const auth = await bcrypt.compare(password, user.password);
 	if (!auth) {
-		return res.json({ message: "Incorrect password or email" });
+		return res.json({ message: "Incorrect password" });
 	}
 	const token = createSecret(user._id);
 	res.cookie("token", token, {
@@ -164,11 +171,11 @@ const doctorLogin = async (req, res) => {
 
 	const doctor = await Doctor.findOne({ email });
 	if (!doctor) {
-		return res.json({ messgae: "Doctor does not exist" });
+		return res.json({ message: "Doctor does not exist" });
 	}
 	const auth = await bcrypt.compare(password, doctor.password);
 	if (!auth) {
-		return res.json({ message: "Incorrect password or email" });
+		return res.json({ message: "Incorrect password" });
 	}
 	const token = createSecret(doctor._id);
 	res.cookie("token", token, {
@@ -179,9 +186,28 @@ const doctorLogin = async (req, res) => {
 		withCredentials: true,
 		httpOnly: false,
 	});
-	res
-		.status(200)
-		.json({ message: "Doctor logged in successfully", success: true });
+	res.status(201).json({ message: "Doctor logged in successfully", success: true, result: doctor });
 };
 
-export { userLogin, userSignup, doctorLogin, doctorSignup };
+const Verifier = async (req,res) => {
+	const token = req.cookies.token;
+	if(!token){
+		return res.status(401).json({message:"No Token"});
+	}
+	jwt.verify(token,process.env.TOKEN_KEY, async(err,data) => {
+		if(err){
+			return res.status(401).json({message:"Expired or Invalid Token"});
+		}
+		const user = await User.findById(data.id);
+		if(!user){
+			const doctor = await Doctor.findById(data.id);
+			if(!doctor){
+				return res.status(401).json({message:"Unauthorized"});
+			}
+			return res.status(200).json({message:"Authorized",data:doctor,role:"doctor"});
+		}
+		res.status(200).json({message:"Authorized",data:user,role:"user"});
+	})
+}
+
+export { userLogin, userSignup, doctorLogin, doctorSignup, Verifier };

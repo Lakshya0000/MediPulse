@@ -29,7 +29,7 @@ import {
                 </span>
               </h1>
               <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                Join CareCircle - a supportive platform connecting differently
+                Join MediPulse - a supportive platform connecting differently
                 abled individuals with healthcare providers and community support.
                 Experience personalized care coordination and inclusive community
                 engagement.
@@ -37,7 +37,7 @@ import {
   
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
-                  <Link to="/signup">
+                  <Link to="/signup/user">
                   <button className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
                     <UserPlus className="w-5 h-5 mr-2" />
                     Join as Patient
@@ -45,7 +45,7 @@ import {
                   </Link>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                <Link to="/signup">
+                <Link to="/signup/doctor">
                   <button  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10">
                     <Stethoscope className="w-5 h-5 mr-2" />
                     Join as Doctor
@@ -61,7 +61,7 @@ import {
                   Join Our Growing Community
                 </h2>
                 <p className="mt-4 text-lg text-gray-500">
-                  CareCircle brings together patients, healthcare providers, and
+                  MediPulse brings together patients, healthcare providers, and
                   support communities to create a comprehensive care network for
                   differently abled individuals.
                 </p>
@@ -91,7 +91,7 @@ import {
             <div className="hero2 mt-24">
               <div className="hero2text">
                 <h2 className="font-extrabold text-3xl text-center text-gray-900 sm:text-4xl mb-12">
-                  How CareCircle Supports You
+                  How MediPulse Supports You
                 </h2>
               </div>
               <div className="features grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-18">
