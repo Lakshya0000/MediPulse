@@ -95,7 +95,7 @@ const userLogin = async (req, res) => {
 		withCredentials: true,
 		httpOnly: false,
 	});
-	res.status(201).json({ message: "User logged in successfully", success: true });
+	res.status(201).json({ message: "User logged in successfully", success: true, result: user });
 };
 
 const doctorSignup = async (req, res, next) => {
