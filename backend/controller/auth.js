@@ -5,6 +5,12 @@ import bcrypt from "bcryptjs";
 import { configDotenv } from "dotenv";
 import jwt from "jsonwebtoken";
 configDotenv()
+
+const cookieOptions = {
+    httpOnly: false,
+    secure: true,
+    sameSite: 'none',
+};
 const userSignup = async (req, res, next) => {
 	const {
 		firstName,
@@ -58,14 +64,8 @@ const userSignup = async (req, res, next) => {
 	});
 
 	const token = createSecret(result._id,"user");
-	res.cookie("token", token, {
-		withCredentials: true,
-		httpOnly: false,
-	});
-	res.cookie("id", result._id, {
-		withCredentials: true,
-		httpOnly: false,
-	});
+	res.cookie("token", token, cookieOptions);
+	res.cookie("id", result._id, cookieOptions);
 	res
 		.status(201)
 		.json({ message: "User signed in successfully", success: true, result });
@@ -87,14 +87,8 @@ const userLogin = async (req, res) => {
 		return res.json({ message: "Incorrect password" });
 	}
 	const token = createSecret(user._id,"user");
-	res.cookie("token", token, {
-		withCredentials: true,
-		httpOnly: false,
-	});
-	res.cookie("id", user._id, {
-		withCredentials: true,
-		httpOnly: false,
-	});
+	res.cookie("token", token, cookieOptions);
+	res.cookie("id", user._id, cookieOptions);
 	res.status(201).json({ message: "User logged in successfully", success: true, result: user });
 };
 
@@ -149,14 +143,8 @@ const doctorSignup = async (req, res, next) => {
 	});
 
 	const token = createSecret(result._id,"doctor");
-	res.cookie("token", token, {
-		withCredentials: true,
-		httpOnly: false,
-	});
-	res.cookie("id", result._id, {
-		withCredentials: true,
-		httpOnly: false,
-	});
+	res.cookie("token", token, cookieOptions);
+	res.cookie("id", result._id, cookieOptions);
 	res
 		.status(201)
 		.json({ message: "Doctor signed in successfully", success: true, result });
@@ -178,14 +166,8 @@ const doctorLogin = async (req, res) => {
 		return res.json({ message: "Incorrect password" });
 	}
 	const token = createSecret(doctor._id,"doctor");
-	res.cookie("token", token, {
-		withCredentials: true,
-		httpOnly: false,
-	});
-	res.cookie("id", doctor._id, {
-		withCredentials: true,
-		httpOnly: false,
-	});
+	res.cookie("token", token, cookieOptions);
+	res.cookie("id", doctor._id, cookieOptions);
 	res.status(201).json({ message: "Doctor logged in successfully", success: true, result: doctor });
 };
 
