@@ -8,9 +8,9 @@ const doctorRouter = Router();
 doctorRouter.post("/signup", doctorSignup);
 doctorRouter.post("/login", doctorLogin);
 
-doctorRouter.get("/:id", userValidation, getDoctorById);
+doctorRouter.get("/:id", getDoctorById);
 doctorRouter.delete("/:id", userValidation, deleteDoctorById);
-doctorRouter.get("/", userValidation, getAllDoctors);
+doctorRouter.get("/", getAllDoctors);
 
 
 export default doctorRouter;

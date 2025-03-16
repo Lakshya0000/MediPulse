@@ -12,9 +12,10 @@ import { useAuth } from '../context/AuthContext'
 import axios from 'axios'
 import Voice from '../components/Voice'
 import { BACKEND_URL } from '../utils'
+import { useNavigate } from 'react-router-dom'
 
 function Chat() {
-  const { user, communities } = useAuth()
+  const { user, communities,isAuth } = useAuth()
   const [messages, setMessages] = useState([])
   const [inputMessage, setInputMessage] = useState('')
   const [voiceMessage, setVoiceMessage] = useState('')
@@ -23,7 +24,10 @@ function Chat() {
   const [showSidebar, setShowSidebar] = useState(false)
   const [loading, setLoading] = useState(true)
   const messagesEndRef = useRef(null)
-
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if(!isAuth) navigate("/login");
+  },[isAuth]);
   // Format timestamp for messages
   const formatMessageTime = (dateString) => {
     const date = new Date(dateString)

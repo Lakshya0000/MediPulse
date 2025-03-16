@@ -47,13 +47,6 @@ const Footer = () => {
                   Doctors
                 </Link>
               </li>
-              <li>
-                <Link
-                  to='/resources'
-                  className='text-gray-600 hover:text-blue-600'>
-                  Resources
-                </Link>
-              </li>
             </ul>
           </div>
           <div className='fpart3'>
@@ -62,25 +55,25 @@ const Footer = () => {
             </h3>
             <ul className='mt-4 space-y-4'>
               <li>
-                <a
-                  href='#'
+                <Link
+                  to={'/privacy'}
                   className='text-gray-600 hover:text-blue-600'>
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href='#'
+                <Link
+                  to={'/terms'}
                   className='text-gray-600 hover:text-blue-600'>
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href='#'
+                <Link
+                  to={'/cookiepolicy'}
                   className='text-gray-600 hover:text-blue-600'>
                   Cookie Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

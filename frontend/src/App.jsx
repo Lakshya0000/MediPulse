@@ -9,6 +9,10 @@ import Chat from "./pages/Chat";
 import DoctorsProfile from "./pages/DoctorsProfile";
 import CommunityForm from "./pages/CommunityForm";
 import Doctors from "./pages/Doctors";
+import About from "./pages/About";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import DataUsagePolicy  from "./pages/DataUsagePolicy"
 
 
 function App() {
@@ -27,6 +31,10 @@ function App() {
         <Route path="/doctorsProfile/:id" element={<DoctorsProfile />} />
         <Route path="/communities" element={<CommunityForm />} />
         <Route path="/doctors" element={<Doctors />}/>
+        <Route path="/about" element={<About />}/>
+        <Route path="/privacy" element={<Privacy />}/>
+        <Route path="/terms" element={<Terms />}/>
+        <Route path="/cookiepolicy" element={<DataUsagePolicy />}/>
       </Routes>
       <Footer />
     </>
