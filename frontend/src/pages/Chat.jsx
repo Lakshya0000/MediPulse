@@ -1,524 +1,527 @@
-// import { useState, useEffect } from "react";
-// import { Send } from "lucide-react";
-// import { io } from "socket.io-client";
-
-// function Chat() {
-// 	const [newMessage, setNewMessage] = useState("");
-// 	const [socket, setSocket] = useState(null);
-
-// 	useEffect(() => {
-// 		const eSocket = io("http://localhost:8080/chatroom", {
-// 			path: "/chatroom/socket.io",
-// 		});
-// 		setSocket(eSocket);
-// 		eSocket.on("message", (msg) => console.log(msg));
-// 	}, []);
-
-// 	const [messages, setMessages] = useState([
-// 		{
-// 			id: 1,
-// 			author: "John Doe",
-// 			content: "Has anyone tried the new mobility assistance app?",
-// 			timestamp: "09:30 am",
-// 			avatar:
-// 				"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
-// 		},
-// 		{
-// 			id: 2,
-// 			author: "Dr. Sarah Wilson",
-// 			content:
-// 				"I'll coordinate care with both services. Let me know when you're prepared...",
-// 			timestamp: "09:35 am",
-// 			avatar:
-// 				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=faces",
-// 		},
-// 	]);
-
-// 	const [groups] = useState([
-// 		{
-// 			name: "Support Group",
-// 			members: 114,
-// 			image:
-// 				"https://th.bing.com/th?id=OIP.1qiVa6E6x0TBFj8BEqQOtQHaED&w=337&h=185&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
-// 		},
-// 		{
-// 			name: "Mental Health",
-// 			members: 28,
-// 			image:
-// 				"https://th.bing.com/th/id/OIP._TIk3o71-8RVNbnNgsJ53gHaE9?w=258&h=183&c=7&r=0&o=5&dpr=1.5&pid=1.7",
-// 		},
-// 		{
-// 			name: "Caregivers Circle",
-// 			members: 42,
-// 			image:
-// 				"https://th.bing.com/th/id/OIP.fez3f0vSPVrUlGCHZFWFLgHaE7?pid=ImgDet&w=178&h=118&c=7&dpr=1.5",
-// 		},
-// 		{
-// 			name: "Medical Support",
-// 			members: 35,
-// 			image:
-// 				"https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150&h=150&fit=crop",
-// 		},
-// 		{
-// 			name: "Mobility Aid Users",
-// 			members: 21,
-// 			image:
-// 				"https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=150&h=150&fit=crop",
-// 		},
-// 		{
-// 			name: "Wellness & Recovery",
-// 			members: 56,
-// 			image:
-// 				"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=150&h=150&fit=crop",
-// 		},
-// 	]);
-
-// 	const [selectedGroup, setSelectedGroup] = useState(0);
-// 	// const [showImageInput] = useState(false);
-
-// 	const handleSendMessage = (e) => {
-// 		e.preventDefault();
-// 		if (!newMessage.trim()) return;
-
-// 		const now = new Date();
-// 		const timestamp = now.toLocaleTimeString([], {
-// 			hour: "2-digit",
-// 			minute: "2-digit",
-// 		});
-
-// 		const newMsg = {
-// 			id: messages.length + 1,
-// 			author: "You",
-// 			content: newMessage,
-// 			timestamp: timestamp,
-// 			avatar:
-// 				"https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?w=150&h=150&fit=crop&crop=faces",
-// 			isUser: true,
-// 		};
-
-// 		setMessages([...messages, newMsg]);
-// 		setNewMessage("");
-// 	};
-
-// 	return (
-// 		<div className="flex h-screen bg-gray-100">
-// 			{/* Sidebar */}
-// 			<div className="w-80 bg-white border-r border-gray-200">
-// 				<div className="p-4 border-b border-gray-200">
-// 					<h1 className="text-xl font-semibold">Communities</h1>
-// 					<div className="mt-4">
-// 						<input
-// 							type="text"
-// 							placeholder="Search communities..."
-// 							className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-// 						/>
-// 					</div>
-// 				</div>
-
-// 				<div className="overflow-y-auto">
-// 					{groups.map((group, index) => (
-// 						<div
-// 							key={index}
-// 							className={`p-4 hover:bg-gray-50 cursor-pointer ${
-// 								index === selectedGroup ? "bg-blue-50" : ""
-// 							}`}
-// 							onClick={() => setSelectedGroup(index)}
-// 						>
-// 							<div className="flex items-center">
-// 								{group.image ? (
-// 									<img
-// 										src={group.image}
-// 										alt={group.name}
-// 										className="w-12 h-12 rounded-full object-cover mr-3"
-// 									/>
-// 								) : (
-// 									<span className="text-2xl mr-3">{group.icon}</span>
-// 								)}
-// 								<div>
-// 									<h2 className="font-medium">{group.name}</h2>
-// 									<p className="text-sm text-gray-500">
-// 										{group.members} members
-// 									</p>
-// 								</div>
-// 							</div>
-// 						</div>
-// 					))}
-// 				</div>
-// 			</div>
-
-// 			{/* Main Chat Area */}
-// 			<div className="flex-1 flex flex-col">
-// 				{/* Chat Header */}
-// 				<div className="p-4 border-b border-gray-200 bg-white">
-// 					<div className="flex items-center justify-between">
-// 						<div className="flex items-center">
-// 							{groups[selectedGroup].image ? (
-// 								<img
-// 									src={groups[selectedGroup].image}
-// 									alt={groups[selectedGroup].name}
-// 									className="w-10 h-10 rounded-full object-cover mr-3"
-// 								/>
-// 							) : (
-// 								<span className="text-2xl mr-3">
-// 									{groups[selectedGroup].icon}
-// 								</span>
-// 							)}
-// 							<div>
-// 								<h2 className="text-xl font-semibold">
-// 									{groups[selectedGroup].name}
-// 								</h2>
-// 								<span className="text-gray-500 text-sm">
-// 									{groups[selectedGroup].members} members
-// 								</span>
-// 							</div>
-// 						</div>
-// 					</div>
-// 				</div>
-
-// 				{/* Messages */}
-// 				<div className="flex-1 overflow-y-auto p-4 space-y-4">
-// 					{messages.map((message) => (
-// 						<div
-// 							key={message.id}
-// 							className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}
-// 						>
-// 							<div
-// 								className={`flex ${
-// 									message.isUser ? "flex-row-reverse" : "flex-row"
-// 								} items-start max-w-xl`}
-// 							>
-// 								<img
-// 									src={message.avatar}
-// 									alt={message.author}
-// 									className="w-10 h-10 rounded-full object-cover "
-// 								/>
-// 								<div
-// 									className={`mx-3 ${
-// 										message.isUser ? "items-end" : "items-start"
-// 									}`}
-// 								>
-// 									<div className="flex items-center  mb-1 ">
-// 										<span className="font-medium text-sm text-gray-900 ">
-// 											{message.author}
-// 										</span>
-// 										<span className="ml-2 text-xs text-gray-500 ">
-// 											{message.timestamp}
-// 										</span>
-// 									</div>
-// 									<div
-// 										className={`rounded-lg px-4 py-2 ${
-// 											message.isUser
-// 												? "bg-blue-500 text-white"
-// 												: "bg-gray-200 text-gray-900"
-// 										}`}
-// 									>
-// 										{message.content}
-// 									</div>
-// 								</div>
-// 							</div>
-// 						</div>
-// 					))}
-// 				</div>
-
-// 				{/* Message Input */}
-// 				<form
-// 					onSubmit={handleSendMessage}
-// 					className="sticky bottom-0 p-4 w-full border-t border-gray-200 bg-white"
-// 				>
-// 					<div className="flex items-center">
-// 						<input
-// 							type="text"
-// 							value={newMessage}
-// 							onChange={(e) => setNewMessage(e.target.value)}
-// 							placeholder="Type your message..."
-// 							className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-// 						/>
-// 						<button
-// 							type="submit"
-// 							className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-// 						>
-// 							<Send className="w-5 h-5" />
-// 						</button>
-// 					</div>
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// }
-
-// export default Chat;
-
-import { useState, useEffect } from "react";
-import { Send, Plus } from "lucide-react";
-import { io } from "socket.io-client";
-import Voice from "../components/Voice";
+import { useState, useEffect, useRef } from 'react'
+import {
+  Send,
+  Plus,
+  Search,
+  Users,
+  Menu,
+  X,
+  MessageCircle
+} from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import axios from 'axios'
+import Voice from '../components/Voice'
+import { BACKEND_URL } from '../utils'
 
 function Chat() {
-	const [socket, setSocket] = useState();
-	const [messages, setMessages] = useState([]);
-	const [voiceMessage, setVoiceMessage] = useState();
-	const [communities, setCommunities] = useState([]);
-	const [selectedCommunity, setSelectedCommunity] = useState();
-	const make_socket = (index) => {
-		const eSocket = io("http://localhost:8080/chatroom", {
-			auth: {
-				room: communities[index]._id,
-			},
-		});
-		eSocket.on(communities[index]._id, (msg) => {
-			socketSetMessage(msg);
-		});
-		setSocket(eSocket);
-	};
+  const { user, communities } = useAuth()
+  const [messages, setMessages] = useState([])
+  const [inputMessage, setInputMessage] = useState('')
+  const [voiceMessage, setVoiceMessage] = useState('')
+  const [selectedCommunity, setSelectedCommunity] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showSidebar, setShowSidebar] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const messagesEndRef = useRef(null)
 
-	function socketSetMessage(msg) {
-		msg.avatar =
-			"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=faces";
-		msg.isUser = true;
-		console.log(msg);
-		setMessages((prevMessages) => [...prevMessages, msg]);
-	}
+  // Format timestamp for messages
+  const formatMessageTime = (dateString) => {
+    const date = new Date(dateString)
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  }
 
-	function getCookie(cname) {
-		const name = `${cname}=`;
-		const decodedCookie = decodeURIComponent(document.cookie);
-		const ca = decodedCookie.split(";");
-		for (let i = 0; i < ca.length; i++) {
-			let c = ca[i];
-			while (c.charAt(0) === " ") {
-				c = c.substring(1);
-			}
-			if (c.indexOf(name) === 0) {
-				return c.substring(name.length, c.length);
-			}
-		}
-		return "";
-	}
+  // Poll for new messages every 2 seconds
+  useEffect(() => {
+    if (selectedCommunity === null) {
+      return
+    }
+    
+    const interval = setInterval(async() => {
+      try {
+        const response = await axios.get(
+          `${BACKEND_URL}/community/${communities[selectedCommunity]._id}`,
+          { withCredentials: true }
+        )
+        
+        const formattedMessages = response.data.map((msg) => ({
+          ...msg,
+          isUser: msg.author === user?._id,
+        }))
+        
+        setMessages(formattedMessages)
+      } catch (error) {
+        console.error("Error polling for messages:", error)
+      }
+    }, 2000)
+    
+    return () => clearInterval(interval)
+  }, [selectedCommunity])
 
-	const handleSendMessage = async (e) => {
-		e.preventDefault();
-		const content = voiceMessage;
-		const community_name = communities[selectedCommunity].title;
+  // Get user's first name and last initial
+  const getUserInitials = (firstName, lastName) => {
+    if (!firstName) return ''
+    return lastName
+      ? `${firstName.charAt(0)}${lastName.charAt(0)}`
+      : firstName.charAt(0)
+  }
 
-		if (content && community_name) {
-			const res = await fetch("http://localhost:8080/message", {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					community_name: community_name,
-					content: content,
-				}),
-			});
-			const obj = await res.json();
-			socket.emit("message", obj.msg);
-			obj.msg.avatar =
-				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=faces";
-			obj.msg.isUser = true;
+  // Handle sending a message
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
+    const content = inputMessage || voiceMessage
+    
+    if (!content.trim() || selectedCommunity === null) {
+      return
+    }
 
-			setMessages([...messages, obj.msg]);
-		}
-    setVoiceMessage("")
-	};
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        `${BACKEND_URL}/message`,
+        {
+          id: communities[selectedCommunity]._id,
+          content: content.trim(),
+        },
+        { withCredentials: true }
+      )
 
-	const handleChangeCommunity = async (index) => {
-		const res = await fetch(
-			`http://localhost:8080/community/${communities[index]._id}`,
-			{
-				credentials: "include",
-				method: "GET",
-			},
-		);
-		const obj = await res.json();
-		let id = getCookie("id");
-		id = id.substring(3).substring(0, id.length - 4);
-		for (let i = 0; i < obj.length; i++) {
-			obj[i].avatar =
-				"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=150&h=150&fit=crop";
-			if (obj[i].author === id) {
-				obj[i].isUser = true;
-			}
-		}
-		setMessages(obj);
-		setSelectedCommunity(index);
-		make_socket(index);
-		// socket.on(communities[index]._id, (msg) => {
-		// 	socketSetMessage(msg);
-		// });
-	};
+      // Add the new message to the messages state
+      if (response.data.msg) {
+        const newMessage = {
+          ...response.data.msg,
+          isUser: response.data.msg.author === user?._id,
+        }
+        setMessages((prev) => [...prev, newMessage])
+      }
 
-	useEffect(() => {
-		async function getCommunities() {
-			const res = await fetch("http://localhost:8080/community", {
-				credentials: "include",
-				method: "GET",
-			});
-			const obj = await res.json();
-			console.log("Communities : ", obj);
-			for (let i = 0; i < obj.length; i++) {
-				obj[i].image =
-					"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=150&h=150&fit=crop";
-			}
-			setCommunities(obj);
-		}
-		getCommunities();
-	}, []);
+      // Clear input fields
+      setInputMessage('')
+      setVoiceMessage('')
+    } catch (error) {
+      console.error('Error sending message:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-	return (
-		<div className="flex h-screen bg-gray-100">
-			{/* Sidebar */}
-			<div className="w-90 bg-white border-r border-gray-200">
-				<div className="p-4 border-b border-gray-200">
-					<h1 className="text-xl font-semibold flex items-center gap-40">
-						Communities
-						<a href="/new">
-							<button>
-								<Plus color="#2563EB" />
-							</button>
-						</a>
-					</h1>
-					<div className="mt-4">
-						<input
-							type="text"
-							placeholder="Search communities..."
-							className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						/>
-					</div>
-				</div>
+  // Handle community selection
+  const handleChangeCommunity = async (index) => {
+    try {
+      setLoading(true)
+      setSelectedCommunity(index)
 
-				<div className="overflow-y-auto">
-					{communities.map((group, index) => (
-						<div
-							key={index}
-							className={`p-4 hover:bg-gray-50 cursor-pointer ${
-								index === selectedCommunity ? "bg-blue-50" : ""
-							}`}
-							onClick={() => handleChangeCommunity(index)}
-						>
-							<div className="flex items-center">
-								{group.image ? (
-									<img
-										src={group.image}
-										alt={group.name}
-										className="w-12 h-12 rounded-full object-cover mr-3"
-									/>
-								) : (
-									<span className="text-2xl mr-3">{group.icon}</span>
-								)}
-								<div>
-									<h2 className="font-medium">{group.title}</h2>
-									<p className="text-sm text-gray-500">
-										{group.members} members
-									</p>
-								</div>
-							</div>
-						</div>
-					))}
-				</div>
-			</div>
+      const response = await axios.get(
+        `${BACKEND_URL}/community/${communities[index]._id}`,
+        { withCredentials: true }
+      )
 
-			{/* Main Chat Area */}
-			<div className="flex-1 flex flex-col">
-				{/* Chat Header */}
-				{/* <div className="p-4 border-b border-gray-200 bg-white"> */}
-				{/* 	<div className="flex items-center justify-between"> */}
-				{/* 		<div className="flex items-center"> */}
-				{/* {communities[selectedCommunity].image ? ( */}
-				{/* 	<img */}
-				{/* 		src={communities[selectedCommunity].image} */}
-				{/* 		alt={communities[selectedCommunity].name} */}
-				{/* 		className="w-10 h-10 rounded-full object-cover mr-3" */}
-				{/* 	/> */}
-				{/* ) : ( */}
-				{/* 	<span className="text-2xl mr-3"> */}
-				{/* 		{communities[selectedCommunity].icon} */}
-				{/* 	</span> */}
-				{/* )} */}
-				{/* <div> */}
-				{/* 	<h2 className="text-xl font-semibold"> */}
-				{/* 		{communities[selectedCommunity].name} */}
-				{/* 	</h2> */}
-				{/* 	<span className="text-gray-500 text-sm"> */}
-				{/* 		{communities[selectedCommunity].members} members */}
-				{/* 	</span> */}
-				{/* </div> */}
-				{/* 		</div> */}
-				{/* 	</div> */}
-				{/* </div> */}
+      // Transform message objects to include isUser property
+      const formattedMessages = response.data.map((msg) => ({
+        ...msg,
+        isUser: msg.author === user?._id,
+      }))
 
-				{/* Messages */}
-				<div className="flex-1 overflow-y-auto p-4 space-y-4">
-					{messages.map((message) => (
-						<div
-							key={message.id}
-							className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}
-						>
-							<div
-								className={`flex ${
-									message.isUser ? "flex-row-reverse" : "flex-row"
-								} items-start max-w-xl`}
-							>
-								<img
-									src={message.avatar}
-									alt={message.author_name}
-									className="w-10 h-10 rounded-full object-cover "
-								/>
-								<div
-									className={`mx-3 ${
-										message.isUser ? "items-end" : "items-start"
-									}`}
-								>
-									<div className="flex items-center  mb-1 ">
-										<span className="font-medium text-sm text-gray-900 ">
-											{message.author_name}
-										</span>
-										<span className="ml-2 text-xs text-gray-500 ">
-											{message.timestamp}
-										</span>
-									</div>
-									<div
-										className={`rounded-lg px-4 py-2 ${
-											message.isUser
-												? "bg-blue-500 text-white"
-												: "bg-gray-200 text-gray-900"
-										}`}
-									>
-										{message.content}
-									</div>
-								</div>
-							</div>
-						</div>
-					))}
-				</div>
+      setMessages(formattedMessages)
+      setShowSidebar(false) // Close sidebar on mobile after selection
+    } catch (error) {
+      console.error('Error fetching community messages:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-				{/* Message Input */}
-				<form
-					onSubmit={handleSendMessage}
-					className="sticky bottom-0 p-4 w-full border-t border-gray-200 bg-white"
-				>
-					<div className="flex items-center">
-						<input
-							type="text"
-							placeholder="Type your message..."
-							value={voiceMessage}
-							onChange={(e) => setVoiceMessage(e.target.value)}
-							className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-						/>
-						
-						<button
-							type="submit"
-							className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-						>
-							<Send className="w-5 h-5" />
-						</button>
-						<Voice setNewMessage={setVoiceMessage} />
-					</div>
-				</form>
-			</div>
-		</div>
-	);
+  // Fetch user's communities on component mount
+
+// Auto-scroll message area to bottom when messages update
+useEffect(() => {
+  if (messages.length && messagesEndRef.current) {
+    // This scrolls only the message container div
+    const container = messagesEndRef.current;
+    container.scrollTop = container.scrollHeight;
+  }
+}, [messages]);
+
+
+  // Filter communities based on search term
+  const filteredCommunities = communities?.filter((community) =>
+    community.title?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  // Generate color based on community name
+  const getCommunityColor = (name) => {
+    if (!name) return 'bg-blue-500'
+
+    const colors = [
+      'bg-blue-500',
+      'bg-indigo-500',
+      'bg-purple-500',
+      'bg-pink-500',
+      'bg-red-500',
+      'bg-orange-500',
+      'bg-amber-500',
+      'bg-yellow-500',
+      'bg-lime-500',
+      'bg-green-500',
+      'bg-emerald-500',
+      'bg-teal-500',
+      'bg-cyan-500',
+    ]
+
+    const charCode = name.charCodeAt(0)
+    return colors[charCode % colors.length]
+  }
+
+  return (
+    // Main container - adjusted to fit below navbar and above footer
+    <div className="flex h-[calc(100vh-7rem)] bg-gray-50 shadow-md rounded-lg overflow-hidden border border-gray-200 m-4">
+      {/* Mobile overlay for sidebar */}
+      {showSidebar && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+
+      {/* Sidebar - with adjusted height */}
+      <div
+        className={`fixed lg:relative z-40 h-full bg-white border-r border-gray-200 w-72 max-w-[85%] transition-transform duration-300 
+          ${showSidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+      >
+        {/* Community header */}
+        <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg font-bold text-gray-800 truncate">Communities</h1>
+            <div className="flex items-center">
+              <a
+                href="/new"
+                className="text-blue-600 hover:bg-blue-100 p-2 rounded-full transition-colors"
+                title="Create new community"
+              >
+                <Plus size={18} />
+              </a>
+              <button
+                className="p-2 lg:hidden text-gray-500 hover:bg-gray-100 rounded-full ml-1"
+                onClick={() => setShowSidebar(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-3 relative">
+            <input
+              type="text"
+              placeholder="Search communities..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-2 pl-9 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 text-sm"
+            />
+            <Search
+              className="absolute left-3 top-2.5 text-gray-400"
+              size={15}
+            />
+            {searchTerm && (
+              <button
+                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                onClick={() => setSearchTerm('')}
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Communities list - adjusted height to account for header */}
+        <div className="overflow-y-auto h-[calc(100%-5.5rem)]">
+          {loading && !communities?.length ? (
+            <div className="p-3 flex justify-center">
+              <div className="animate-pulse flex flex-col w-full space-y-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-center px-3 py-2">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 mr-3 flex-shrink-0"></div>
+                    <div className="space-y-2 flex-1 min-w-0">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : filteredCommunities?.length === 0 ? (
+            <div className="p-8 text-center text-gray-500">
+              <div className="bg-gray-100 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center mb-3">
+                <Users size={24} className="text-gray-400" />
+              </div>
+              <p className="font-medium">No communities found</p>
+              <p className="text-sm mt-1">Try a different search term</p>
+            </div>
+          ) : (
+            filteredCommunities?.map((community, index) => (
+              <div
+                key={community._id}
+                className={`p-3 hover:bg-gray-50 cursor-pointer transition-colors ${
+                  index === selectedCommunity
+                    ? 'bg-blue-50 border-l-4 border-blue-600'
+                    : ''
+                }`}
+                onClick={() => handleChangeCommunity(index)}
+              >
+                <div className="flex items-center min-w-0">
+                  <div
+                    className={`w-10 h-10 rounded-full ${getCommunityColor(
+                      community.title
+                    )} flex items-center justify-center text-white font-bold text-base shadow-sm flex-shrink-0`}
+                  >
+                    {community.title.charAt(0)}
+                  </div>
+                  <div className="ml-3 overflow-hidden flex-1">
+                    <h2 className="font-medium text-gray-800 truncate">
+                      {community.title}
+                    </h2>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Users size={12} className="mr-1 flex-shrink-0" />
+                      <span className="truncate">{community.members?.length || 0} members</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Chat Header */}
+        {selectedCommunity !== null && communities[selectedCommunity] && (
+          <div className="p-3 border-b border-gray-200 bg-white shadow-sm flex items-center justify-between">
+            <div className="flex items-center min-w-0">
+              <button
+                className="mr-3 lg:hidden bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-colors flex-shrink-0"
+                onClick={() => setShowSidebar(true)}
+                aria-label="Open communities sidebar"
+              >
+                <Menu size={18} />
+              </button>
+              <div
+                className={`w-9 h-9 rounded-full ${getCommunityColor(
+                  communities[selectedCommunity].title
+                )} flex items-center justify-center text-white font-bold shadow-sm flex-shrink-0`}
+              >
+                {communities[selectedCommunity].title.charAt(0)}
+              </div>
+              <div className="ml-3 overflow-hidden">
+                <h2 className="text-base font-semibold text-gray-800 truncate">
+                  {communities[selectedCommunity].title}
+                </h2>
+                <div className="flex items-center text-xs text-gray-500">
+                  <Users size={12} className="mr-1 flex-shrink-0" />
+                  <span className="truncate">
+                    {communities[selectedCommunity].members?.length || 0} members
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="hidden md:flex items-center ml-2 flex-shrink-0">
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium shadow-sm truncate max-w-[140px]">
+                {communities[selectedCommunity].category}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Messages Area - adjusted for better space utilization */}
+        <div
+          ref={messagesEndRef}
+          className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+          }}
+        >
+          {selectedCommunity === null ? (
+            <div className="h-full flex flex-col items-center justify-center text-center p-4">
+              <div className="bg-white p-6 rounded-xl shadow-sm max-w-md border border-gray-100">
+                <div className="bg-blue-50 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Users size={28} className="text-blue-600" />
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 mb-3">
+                  Welcome to Communities
+                </h2>
+                <p className="text-gray-600 mb-5">
+                  Select a community from the sidebar to start chatting with
+                  other members.
+                </p>
+                <button
+                  onClick={() => setShowSidebar(true)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors lg:hidden shadow-sm font-medium"
+                >
+                  Browse Communities
+                </button>
+              </div>
+            </div>
+          ) : loading && !messages.length ? (
+            <div className="flex flex-col space-y-4 p-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className={`flex ${i % 2 === 0 ? "justify-end" : "justify-start"}`}
+                >
+                  <div className="animate-pulse flex items-start max-w-[80%]">
+                    <div className="h-8 w-8 rounded-full bg-gray-200 flex-shrink-0"></div>
+                    <div
+                      className={`mx-3 ${
+                        i % 2 === 0 ? "items-end" : "items-start"
+                      }`}
+                    >
+                      <div className="h-3 bg-gray-200 rounded-full w-16 mb-1"></div>
+                      <div className="h-12 bg-gray-200 rounded-lg w-32 sm:w-40"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : messages.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-center p-4">
+              <div className="bg-white p-6 rounded-lg shadow-sm max-w-sm border border-gray-100">
+                <div className="bg-blue-100 rounded-full p-3 w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle size={24} className="text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  No messages yet
+                </h3>
+                <p className="text-gray-600 text-sm mb-3">
+                  Be the first to send a message in this community!
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Message list */}
+              {messages.map((message, index) => {
+                const isFirstMessageFromUser =
+                  index === 0 || messages[index - 1].author !== message.author
+
+                return (
+                  <div
+                    key={message._id || index}
+                    className={`flex ${
+                      message.isUser ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`flex ${
+                        message.isUser ? "flex-row-reverse" : "flex-row"
+                      } items-end max-w-[85%] group`}
+                    >
+                      {isFirstMessageFromUser && (
+                        <div
+                          className={`${
+                            message.isUser ? "ml-2" : "mr-2"
+                          } flex-shrink-0`}
+                        >
+                          {message.avatar ? (
+                            <img
+                              src={message.avatar}
+                              alt={message.author_name}
+                              className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                            />
+                          ) : (
+                            <div
+                              className={`w-8 h-8 rounded-full ${
+                                message.isUser ? "bg-blue-500" : "bg-gray-400"
+                              } flex items-center justify-center text-white text-xs font-medium shadow-sm`}
+                            >
+                              {getUserInitials(
+                                message.author_name?.split(" ")[0],
+                                message.author_name?.split(" ")[1]
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      <div
+                        className={`mx-1 ${
+                          !isFirstMessageFromUser &&
+                          (message.isUser ? "mr-10" : "ml-10")
+                        } max-w-full`}
+                      >
+                        {isFirstMessageFromUser && (
+                          <div
+                            className={`flex ${
+                              message.isUser ? "justify-end" : "justify-start"
+                            } mb-1`}
+                          >
+                            <span className="font-medium text-xs text-gray-700 px-1 truncate max-w-[180px]">
+                              {message.author_name || "Unknown"}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-end">
+                          <div
+                            className={`rounded-2xl px-3 py-2 ${
+                              message.isUser
+                                ? "bg-blue-600 text-white rounded-tr-none shadow-sm"
+                                : "bg-white text-gray-800 rounded-tl-none border border-gray-200 shadow-sm"
+                            } relative group-hover:shadow-md transition-shadow max-w-full overflow-hidden`}
+                          >
+                            <p className="whitespace-pre-wrap text-sm break-words">
+                              {message.content}
+                            </p>
+                          </div>
+                          <span
+                            className={`text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity mx-2 flex-shrink-0`}
+                          >
+                            {formatMessageTime(message.createdAt || Date.now())}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+              {/* This invisible element helps scroll to bottom */}
+
+            </>
+          )}
+        </div>
+
+        {/* Message Input */}
+        {selectedCommunity !== null && (
+          <form
+            onSubmit={handleSendMessage}
+            className="p-3 border-t border-gray-200 bg-white shadow-inner"
+          >
+            <div className="flex items-center">
+              <input
+                type="text"
+                placeholder="Type your message..."
+                value={inputMessage || voiceMessage}
+                onChange={(e) => {
+                  setInputMessage(e.target.value)
+                  setVoiceMessage("") // Clear voice message when typing
+                }}
+                disabled={loading}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 shadow-inner text-sm"
+              />
+
+              <Voice setNewMessage={setVoiceMessage} />
+
+              <button
+                type="submit"
+                disabled={(!inputMessage && !voiceMessage) || loading}
+                className="ml-2 p-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors shadow-sm flex-shrink-0"
+                title="Send message"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  )
 }
 
-export default Chat;
+export default Chat

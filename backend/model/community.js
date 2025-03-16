@@ -15,6 +15,11 @@ const communitySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      enum: ['Support Group', 'Health', 'Technology', 'Education', 'Others'],
+      required: true,
+    },
 	messages : {
 		type: [mongoose.Schema.Types.ObjectId],
 		required: false,

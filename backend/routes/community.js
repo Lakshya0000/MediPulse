@@ -5,7 +5,8 @@ import {
 	getAllCommunities,
 	getAllMessages,
   getAllUserCommunities,
-  joinCommunity
+  joinCommunity,
+  leaveCommunity
 } from "../controller/community.js";
 
 const communityRouter = Router();
@@ -14,6 +15,7 @@ communityRouter.get("/", userValidation, getAllCommunities);
 communityRouter.post("/create", userValidation, createCommunity);
 communityRouter.get("/user", userValidation, getAllUserCommunities);
 communityRouter.post("/join", userValidation, joinCommunity);
+communityRouter.post("/leave", userValidation, leaveCommunity);
 communityRouter.get("/:id", userValidation, getAllMessages);
 
 export default communityRouter;

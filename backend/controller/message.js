@@ -21,12 +21,12 @@ const createMessage = async (req, res) => {
 			return res.status(401).json({ message: "Unauthorized" });
 		}
 
-		const { content, community_name } = req.body;
-		if (!content || !community_name) {
+		const { content, id } = req.body;
+		if (!content || !id) {
 			return res.json({ message: "Content and community name are required" });
 		}
 
-		const community = await Community.findOne({ title: community_name });
+		const community = await Community.findById(id);
 		if (!community) {
 			return res.json({ message: "Community does not exist" });
 		}
@@ -35,7 +35,7 @@ const createMessage = async (req, res) => {
 			author: user._id,
 			author_name: user.firstName,
 			content: content,
-			community: community._id,
+			community: id,
 		});
 
 		return res.status(201).json({

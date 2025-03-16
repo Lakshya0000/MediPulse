@@ -57,7 +57,7 @@ const userSignup = async (req, res, next) => {
 		gender: gender,
 	});
 
-	const token = createSecret(result._id);
+	const token = createSecret(result._id,"user");
 	res.cookie("token", token, {
 		withCredentials: true,
 		httpOnly: false,
@@ -86,7 +86,7 @@ const userLogin = async (req, res) => {
 	if (!auth) {
 		return res.json({ message: "Incorrect password" });
 	}
-	const token = createSecret(user._id);
+	const token = createSecret(user._id,"user");
 	res.cookie("token", token, {
 		withCredentials: true,
 		httpOnly: false,
@@ -148,7 +148,7 @@ const doctorSignup = async (req, res, next) => {
 		},
 	});
 
-	const token = createSecret(result._id);
+	const token = createSecret(result._id,"doctor");
 	res.cookie("token", token, {
 		withCredentials: true,
 		httpOnly: false,
@@ -177,7 +177,7 @@ const doctorLogin = async (req, res) => {
 	if (!auth) {
 		return res.json({ message: "Incorrect password" });
 	}
-	const token = createSecret(doctor._id);
+	const token = createSecret(doctor._id,"doctor");
 	res.cookie("token", token, {
 		withCredentials: true,
 		httpOnly: false,
@@ -198,15 +198,11 @@ const Verifier = async (req,res) => {
 		if(err){
 			return res.status(401).json({message:"Expired or Invalid Token"});
 		}
-		const user = await User.findById(data.id);
+		const user = await (data.role === "user" ? User : Doctor).findById(data.id);
 		if(!user){
-			const doctor = await Doctor.findById(data.id);
-			if(!doctor){
-				return res.status(401).json({message:"Unauthorized"});
-			}
-			return res.status(200).json({message:"Authorized",data:doctor,role:"doctor"});
+			return res.status(401).json({message:"Unauthorized"});
 		}
-		res.status(200).json({message:"Authorized",data:user,role:"user"});
+		res.status(200).json({message:"Authorized",data:user,role:data.role});
 	})
 }
 

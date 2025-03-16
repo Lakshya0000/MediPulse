@@ -1,3 +1,4 @@
+import Community from "../model/community.js";
 import Doctor from "../model/doctor.js";
 
 const getDoctorById = async (req, res) => {
@@ -5,8 +6,8 @@ const getDoctorById = async (req, res) => {
 	if (!user) {
 		return res.json({ message: "Doctor does not exist" });
 	}
-
-	return res.json(user);
+	const communities = await Community.find({ author: req.params.id });
+	return res.json({ user, communities });
 };
 
 const getAllDoctors = async (_, res) => {

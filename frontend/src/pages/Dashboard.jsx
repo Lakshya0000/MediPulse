@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
-import CommunityCard from "../components/CommunityCard";
-import EventCard from "../components/EventCard";
-import MessageCard from "../components/MessageCard";
 import RecommendationCard from "../components/RecommendationCard";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import RecommendationDoctors from "../components/RecommendationDoctors";
 import { useAuth } from "../context/AuthContext";
 
@@ -22,21 +19,8 @@ const Dashboard = () => {
 				Welcome to Your Health Dashboard
 			</h2>
 
-			<div className="grid grid-cols-3 gap-4 mt-4">
-				<Link to="/chat">
-					<CommunityCard />
-				</Link>
-				<MessageCard />
-				<EventCard />
-			</div>
-
-			{/* <div className="mt-6">
-        <h3 className="text-lg font-semibold">Recent Activity</h3>
-        <ActivityFeed />
-      </div> */}
 
 			<div className="mt-6">
-				<h3 className="text-lg font-semibold">Recommended Communities</h3>
 				<RecommendationCard />
 			</div>
 

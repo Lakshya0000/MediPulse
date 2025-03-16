@@ -7,27 +7,24 @@ configDotenv();
 
 const userValidation = async (req, res, next) => {
 	const token = req.cookies.token;
+	const userId = req.cookies.id
 	console.log(token);
 	if (!token) {
 		return res.status(401).json({ message: "No Token" });
 	}
 	jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
 		if (err) {
-			return res.status(401).json({ message: "Technical Error" });
+			return res.status(401).json({ message: err.message || "Expired or Invalid Token" });
 		}
-
-		const user = await User.findById(data.id);
-		if (!user) {
-			const doctor = await Doctor.findById(data.id);
-			if (!doctor) {
-				return res.status(401).json({ message: "Unauthorized" });
-			}
+		if(data.id !== userId){
+			return res.status(401).json({message:"Unauthorized"});
+		}
+		const user = await (data.role === "user" ? User : Doctor).findById(data.id);
+		if(!user){
+			return res.status(401).json({message:"Unauthorized"});
 		}
 
     next();
-		// return res.json({
-		// 	message: "Authorized",
-		// });
 	});
 };
 
