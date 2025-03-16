@@ -458,7 +458,7 @@ const CommunityCard = () => {
                   key={community._id}
                   id={community._id}
                   ref={(el) => (communityRefs.current[community._id] = el)}
-                  className='bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-64 hover:shadow-lg transition-shadow transition-all duration-300'>
+                  className='bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-64 hover:shadow-lg transition-all duration-300'>
                   <div className='h-2 bg-blue-500'></div>
                   <div className='p-6 flex-1 flex flex-col'>
                     <div className='flex items-center justify-between mb-3'>
