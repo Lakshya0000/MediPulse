@@ -16,7 +16,6 @@ You can view the live application here: [MediPulse Live](https://medipulse-azure
 
 - **Responsive Design:** Optimized for both desktop and mobile devices.
 - **Fast Performance:** Deployed on Vercel for rapid global delivery.
-- **Cloud-Ready:** Integrated with Azure services for scalability and reliability.
 - **User-Friendly Interface:** Designed with simplicity and ease of use in mind.
 - **Google Maps Integration:** Uses Google Maps API to fetch the location of clinics.
 
